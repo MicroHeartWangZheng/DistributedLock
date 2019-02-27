@@ -11,9 +11,11 @@ namespace DistributedLock.Controllers
     public class ValuesController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<String> Get()
         {
-            return new string[] { "value1", "value2" };
+            DistributedLock distributedLock = new DistributedLock();
+            await distributedLock.Test();
+            return "Ok";
         }
     }
 }
