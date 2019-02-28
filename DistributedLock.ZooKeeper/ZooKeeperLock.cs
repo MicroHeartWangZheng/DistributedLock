@@ -92,7 +92,7 @@ namespace DistributedLock.ZooKeeper
         {
             try
             {
-                myWatcher = null;
+                myWatcher.AutoResetEvent.Dispose();
                 await zooKeeper.deleteAsync(lockNode);
             }
             catch (KeeperException e)
