@@ -57,8 +57,23 @@ namespace DistributedLock.ZooKeeper
                     if (millisecondsTimeout == 0)
                         myWatcher.AutoResetEvent.WaitOne();
                     else //如果时间不为0 等待指定时间后，返回结果
-                        return myWatcher.AutoResetEvent.WaitOne(millisecondsTimeout);
+                    {
+                        var result = myWatcher.AutoResetEvent.WaitOne(millisecondsTimeout);
 
+                        if (result)//如果返回True，说明在指定时间内，前面的节点释放了锁(但是)
+                        {
+                            //获取锁下所有节点
+                            lockNodes = await zooKeeper.getChildrenAsync("/Locks");
+                            //判断如果创建的节点就是最小节点 返回锁
+                            if (lockNode.Split("/").Last() == lockNodes.Children[0])
+                                return true;
+                            else
+                                return false;
+                        }
+                        else
+                            return false;
+
+                    }
                 }
             }
             catch (KeeperException e)
