@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Dome": {
+    "DistributedLock.Dome": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",

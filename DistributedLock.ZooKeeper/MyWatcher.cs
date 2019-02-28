@@ -5,12 +5,12 @@ using static org.apache.zookeeper.Watcher.Event;
 
 namespace DistributedLock.ZooKeeper
 {
-    public class MyWatch : Watcher
+    public class MyWatcher : Watcher
     {
 
         public AutoResetEvent AutoResetEvent;
 
-        public MyWatch()
+        public MyWatcher()
         {
             this.AutoResetEvent = new AutoResetEvent(false);
         }

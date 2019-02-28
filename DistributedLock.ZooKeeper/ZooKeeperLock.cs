@@ -7,7 +7,7 @@ namespace DistributedLock.ZooKeeper
 {
     public class ZooKeeperLock
     {
-        private MyWatch myWatch;
+        private MyWatcher myWatcher;
 
         private string lockNode;
 
@@ -15,7 +15,7 @@ namespace DistributedLock.ZooKeeper
 
         public ZooKeeperLock()
         {
-            myWatch = new MyWatch();
+            myWatcher = new MyWatcher();
         }
 
         /// <summary>
@@ -27,33 +27,37 @@ namespace DistributedLock.ZooKeeper
         {
             try
             {
-                zooKeeper = new org.apache.zookeeper.ZooKeeper("127.0.0.1", 50000, new MyWatch());
+                zooKeeper = new org.apache.zookeeper.ZooKeeper("127.0.0.1", 50000, new MyWatcher());
 
+                //创建锁节点
                 if (await zooKeeper.existsAsync("/Locks") == null)
                     await zooKeeper.createAsync("/Locks", null, Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
 
+                //新建一个临时锁节点
                 lockNode = await zooKeeper.createAsync("/Locks/Lock_", null, Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
 
-                var num = int.Parse(lockNode.Split("_").Last());
-
+                //获取锁下所有节点
                 var lockNodes = await zooKeeper.getChildrenAsync("/Locks");
 
                 lockNodes.Children.Sort();
 
+                //判断如果创建的节点就是最小节点 返回锁
                 if (lockNode.Split("/").Last() == lockNodes.Children[0])
                     return true;
                 else
                 {
                     //当前节点的位置
                     var location = lockNodes.Children.FindIndex(n => n == lockNode.Split("/").Last());
-                    //获取当前节点前面一个节点的路径
+                    //获取当前节点 前面一个节点的路径
                     var frontNodePath = lockNodes.Children[location - 1];
+                    //在前面一个节点上加上Watcher ，当前面那个节点删除时，会触发Process方法
+                    await zooKeeper.getDataAsync("/Locks/" + frontNodePath, myWatcher);
 
-                    await zooKeeper.getDataAsync("/Locks/" + frontNodePath, myWatch);
+                    //如果时间为0 一直等待下去
                     if (millisecondsTimeout == 0)
-                        myWatch.AutoResetEvent.WaitOne();
-                    else
-                        return myWatch.AutoResetEvent.WaitOne(millisecondsTimeout);
+                        myWatcher.AutoResetEvent.WaitOne();
+                    else //如果时间不为0 等待指定时间后，返回结果
+                        return myWatcher.AutoResetEvent.WaitOne(millisecondsTimeout);
 
                 }
             }
@@ -65,11 +69,15 @@ namespace DistributedLock.ZooKeeper
             return false;
         }
 
+        /// <summary>
+        /// 释放锁
+        /// </summary>
+        /// <returns></returns>
         public async Task UnLock()
         {
             try
             {
-                myWatch = null;
+                myWatcher = null;
                 await zooKeeper.deleteAsync(lockNode);
             }
             catch (KeeperException e)
