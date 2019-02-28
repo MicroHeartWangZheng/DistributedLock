@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DistributedLock.ZooKeeper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dome.Controllers
@@ -10,36 +11,19 @@ namespace Dome.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<string> Get()
         {
-            return new string[] { "value1", "value2" };
-        }
+            ZooKeeperLock zooKeeperLock = new ZooKeeperLock();
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
+            string result = null;
+            if (await zooKeeperLock.TryLock(6000))
+                result = "Success";
+            else
+                result = "Fail";
+            await zooKeeperLock.UnLock();
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return result;
         }
     }
 }
