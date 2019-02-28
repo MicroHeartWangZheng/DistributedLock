@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedLock", "DistributedLock\DistributedLock.csproj", "{6EFA97DA-038C-4BF9-AF7F-7693D4074E40}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedLock", "DistributedLock\DistributedLock.csproj", "{1DBBAE58-CB90-4FD0-A034-3CF5373E4D56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6EFA97DA-038C-4BF9-AF7F-7693D4074E40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6EFA97DA-038C-4BF9-AF7F-7693D4074E40}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6EFA97DA-038C-4BF9-AF7F-7693D4074E40}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6EFA97DA-038C-4BF9-AF7F-7693D4074E40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DBBAE58-CB90-4FD0-A034-3CF5373E4D56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DBBAE58-CB90-4FD0-A034-3CF5373E4D56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DBBAE58-CB90-4FD0-A034-3CF5373E4D56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DBBAE58-CB90-4FD0-A034-3CF5373E4D56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {7E5F4A4B-D9D5-4D21-A762-F51BE24735A6}
+		SolutionGuid = {75197EFE-835B-4CC1-8867-548ED90751FF}
 	EndGlobalSection
 EndGlobal
